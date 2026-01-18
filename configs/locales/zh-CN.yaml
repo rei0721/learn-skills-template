@@ -1,0 +1,7 @@
+# `.` 之前是架构目录，之后使用 `_` 连接是表达要做的事情
+
+# app logger message
+internal.app.logger_debug_init_config_path: 应用初始化配置路径
+internal.app.logger_debug_init_mode: 应用初始化模式
+internal.app.logger_debug_executor_injected: 执行器注入日志记录器
+internal.app.logger_info_initdb_mode_completed: initdb模式完成
