@@ -18,6 +18,9 @@ func (app *App) runModeInitDB() (*App, error) {
 	if err := app.initDatabase(); err != nil {
 		return nil, err
 	}
+	if err := app.initRBAC(); err != nil {
+		return nil, err
+	}
 
 	// 初始化 Executor
 	if err := app.initExecutor(); err != nil {

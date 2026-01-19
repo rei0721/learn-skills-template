@@ -16,12 +16,3 @@ import "github.com/rei0721/go-scaffold/pkg/executor"
 func (s *httpServer) SetExecutor(exec executor.Manager) {
 	s.executor.Store(exec)
 }
-
-// getExecutor 获取当前executor（内部辅助方法）
-// 返回nil表示未设置executor
-func (s *httpServer) getExecutor() executor.Manager {
-	if exec := s.executor.Load(); exec != nil {
-		return exec.(executor.Manager)
-	}
-	return nil
-}

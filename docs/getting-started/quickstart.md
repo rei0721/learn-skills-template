@@ -19,10 +19,10 @@ cp configs/config.example.yaml configs/config.yaml
 cp .env.example .env
 
 # 初始化数据库（使用 SQLite，无需额外配置）
-go run cmd/server/main.go initdb
+go run ./cmd/server initdb
 
 # 启动服务
-go run cmd/server/main.go server
+go run ./cmd/server server
 ```
 
 ### 2. 验证服务启动
@@ -278,7 +278,7 @@ logger:
 
 ```bash
 # 启动服务并查看日志
-go run cmd/server/main.go server | jq
+go run ./cmd/server server | jq
 ```
 
 ## 📊 监控和指标
@@ -379,17 +379,17 @@ curl http://localhost:8080/api/openapi.json > api-spec.json
 lsof -i :8080
 
 # 检查配置文件
-go run cmd/server/main.go server --config=configs/config.yaml --dry-run
+go run ./cmd/server server --config=configs/config.yaml --dry-run
 ```
 
 #### 数据库连接失败
 
 ```bash
 # 测试数据库连接
-go run cmd/server/main.go tests --test=database
+go run ./cmd/server tests --test=database
 
 # 重新初始化数据库
-go run cmd/server/main.go initdb --force
+go run ./cmd/server initdb --force
 ```
 
 #### 依赖问题
@@ -433,14 +433,14 @@ make clean    # 清理文件
 # 使用环境变量覆盖配置
 export DB_HOST=192.168.1.100
 export REDIS_HOST=192.168.1.101
-go run cmd/server/main.go server
+go run ./cmd/server server
 ```
 
 ### 3. 生产环境配置
 
 ```bash
 # 使用生产配置启动
-go run cmd/server/main.go server --config=configs/production.yaml
+go run ./cmd/server server --config=configs/production.yaml
 ```
 
 ---

@@ -271,14 +271,6 @@ func (g *Generator) Distinct(columns ...string) *Generator {
 // Join 查询
 // ============================================================================
 
-// JoinBuilder Join 构建器
-type JoinBuilder struct {
-	generator *Generator
-	joinType  string
-	table     string
-	condition string
-}
-
 // Joins 添加 JOIN
 func (g *Generator) Joins(query string, args ...interface{}) *Generator {
 	ng := g.clone()

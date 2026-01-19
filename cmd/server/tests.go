@@ -21,7 +21,7 @@ func (c *TestsCommand) Description() string {
 }
 
 func (c *TestsCommand) Usage() string {
-	return fmt.Sprintf("%s", constants.AppTestsCommandName)
+	return constants.AppTestsCommandName
 }
 
 func (c *TestsCommand) Flags() []cli.Flag {

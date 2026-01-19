@@ -17,9 +17,18 @@ func main() {
 	app.SetDescription(constants.AppDescription)
 
 	// 注册命令
-	app.AddCommand(&AppCommand{})
-	app.AddCommand(&InitdbCommand{})
-	app.AddCommand(&TestsCommand{})
+	if err := app.AddCommand(&AppCommand{}); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(cli.GetExitCode(err))
+	}
+	if err := app.AddCommand(&InitdbCommand{}); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(cli.GetExitCode(err))
+	}
+	if err := app.AddCommand(&TestsCommand{}); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(cli.GetExitCode(err))
+	}
 
 	// 执行
 	if err := app.Run(os.Args[1:]); err != nil {

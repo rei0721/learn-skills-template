@@ -12,12 +12,6 @@ type RegisterRequest struct {
 	// max=50 - 最大长度 50 个字符(与数据库字段长度一致)
 	Username string `json:"username" binding:"required,min=3,max=50"`
 
-	// Email 邮箱地址
-	// binding:"required" - 必填字段
-	// email - 使用内置的邮箱格式验证器
-	// 确保邮箱格式正确,包含 @ 和域名
-	Email string `json:"email" binding:"required,email"`
-
 	// Password 密码(明文)
 	// binding:"required" - 必填字段
 	// min=8 - 最小长度 8 位(安全性要求)

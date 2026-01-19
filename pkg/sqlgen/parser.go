@@ -60,9 +60,6 @@ var (
 	// 匹配 CREATE TABLE 语句
 	createTableRegex = regexp.MustCompile(`(?i)CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?[` + "`" + `"'\[]?(\w+)[` + "`" + `"'\]]?\s*\(([\s\S]+?)\)`)
 
-	// 匹配列定义
-	columnDefRegex = regexp.MustCompile(`(?i)^[` + "`" + `"'\[]?(\w+)[` + "`" + `"'\]]?\s+(\w+(?:\([^)]+\))?(?:\s+\w+)*)\s*(.*)$`)
-
 	// 匹配数据类型
 	dataTypeRegex = regexp.MustCompile(`(?i)^(\w+)(?:\(([^)]+)\))?`)
 
@@ -93,7 +90,7 @@ func (p *Parser) parseCreateTable(sql string) (*Schema, error) {
 	columnsBody := matches[2]
 
 	schema := &Schema{
-		Name:      toPascalCase(tableName),
+		Name:      toStructNameFromTable(tableName),
 		TableName: tableName,
 	}
 

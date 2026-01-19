@@ -50,10 +50,16 @@
 | internal/config       | 配置管理                 | 核心 | pkg/logger                    | 02-design-specs           |
 | internal/handler      | HTTP 请求处理            | 核心 | internal/service              | 11-backend, 12-api        |
 | internal/service      | 业务逻辑                 | 核心 | internal/repository           | 11-backend                |
+| internal/service/auth | 认证业务逻辑             | 核心 | internal/repository, pkg/jwt, pkg/crypto, pkg/rbac | 11-backend, 12-api        |
+| internal/service/rbac | RBAC 业务逻辑            | 核心 | internal/repository, pkg/rbac | 11-backend, 12-api        |
 | internal/repository   | 数据访问                 | 核心 | pkg/database, pkg/cache       | 11-backend, 13-database   |
+| internal/repository/auth | 认证数据访问          | 核心 | pkg/database                  | 11-backend, 13-database   |
+| internal/repository/rbac | RBAC 数据访问         | 核心 | pkg/rbac                      | 11-backend, 13-database   |
 | internal/models       | 数据模型                 | 核心 | types                         | 13-database               |
 | internal/middleware   | 中间件                   | 核心 | pkg/jwt, pkg/rbac, pkg/logger | 11-backend, 12-api        |
 | internal/router       | 路由配置                 | 核心 | internal/handler              | 12-api                    |
+| internal/handler/rbac_handler.go | RBAC HTTP 接口   | 核心 | internal/service/rbac         | 11-backend, 12-api        |
+| internal/handler/auth_handler.go | 认证 HTTP 接口   | 核心 | internal/service/auth         | 11-backend, 12-api        |
 
 ### 支撑模块
 

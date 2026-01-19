@@ -66,7 +66,7 @@ cp configs/config.example.yaml configs/config.yaml
 cp .env.example .env
 
 # 初始化数据库
-go run cmd/server/main.go initdb
+go run ./cmd/server initdb
 
 # 运行测试确保环境正常
 make test

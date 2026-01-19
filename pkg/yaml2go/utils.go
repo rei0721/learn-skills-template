@@ -2,7 +2,6 @@ package yaml2go
 
 import (
 	"strings"
-	"unicode"
 
 	"github.com/iancoleman/strcase"
 )
@@ -90,24 +89,6 @@ func sanitizeFieldName(name string) string {
 		return "Field" + goName
 	}
 	return goName
-}
-
-// isNumeric 检查字符串是否为数字
-func isNumeric(s string) bool {
-	if s == "" {
-		return false
-	}
-	for _, r := range s {
-		if !unicode.IsDigit(r) && r != '.' && r != '-' && r != '+' && r != 'e' && r != 'E' {
-			return false
-		}
-	}
-	return true
-}
-
-// hasDecimalPoint 检查字符串是否包含小数点
-func hasDecimalPoint(s string) bool {
-	return strings.Contains(s, ".")
 }
 
 // copyStringSlice 复制字符串切片

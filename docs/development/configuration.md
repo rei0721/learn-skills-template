@@ -537,11 +537,11 @@ database:
 
 ```bash
 # 使用不同的配置文件
-go run cmd/server/main.go server --config=configs/config.production.yaml
+go run ./cmd/server server --config=configs/config.production.yaml
 
 # 或使用环境变量指定
 export REI_CONFIG_PATH=configs/config.production.yaml
-go run cmd/server/main.go server
+go run ./cmd/server server
 ```
 
 ## 🐛 故障排除

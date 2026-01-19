@@ -55,7 +55,7 @@ func (c *CodeGenerator) Generate(schema *Schema) string {
 	// TableName 方法
 	if c.options.WithTableName {
 		sb.WriteString("\n")
-		sb.WriteString(fmt.Sprintf("// TableName overrides the table name\n"))
+		sb.WriteString("// TableName overrides the table name\n")
 		sb.WriteString(fmt.Sprintf("func (%s) TableName() string {\n", schema.Name))
 		sb.WriteString(fmt.Sprintf("\treturn \"%s\"\n", schema.TableName))
 		sb.WriteString("}\n")
@@ -218,14 +218,14 @@ func (c *CodeGenerator) GenerateDAO(schema *Schema, methods []string) string {
 }
 
 func (c *CodeGenerator) writeCreateMethod(sb *strings.Builder, schema *Schema, daoName string) {
-	sb.WriteString(fmt.Sprintf("// Create 创建记录\n"))
+	sb.WriteString("// Create 创建记录\n")
 	sb.WriteString(fmt.Sprintf("func (d *%s) Create(entity *%s) error {\n", daoName, schema.Name))
 	sb.WriteString("\treturn d.db.Create(entity).Error\n")
 	sb.WriteString("}\n\n")
 }
 
 func (c *CodeGenerator) writeUpdateMethod(sb *strings.Builder, schema *Schema, daoName string) {
-	sb.WriteString(fmt.Sprintf("// Update 更新记录\n"))
+	sb.WriteString("// Update 更新记录\n")
 	sb.WriteString(fmt.Sprintf("func (d *%s) Update(entity *%s) error {\n", daoName, schema.Name))
 	sb.WriteString("\treturn d.db.Save(entity).Error\n")
 	sb.WriteString("}\n\n")
@@ -246,7 +246,7 @@ func (c *CodeGenerator) writeDeleteMethod(sb *strings.Builder, schema *Schema, d
 		pkType = pkField.Type
 	}
 
-	sb.WriteString(fmt.Sprintf("// Delete 删除记录\n"))
+	sb.WriteString("// Delete 删除记录\n")
 	sb.WriteString(fmt.Sprintf("func (d *%s) Delete(id %s) error {\n", daoName, pkType))
 	sb.WriteString(fmt.Sprintf("\treturn d.db.Delete(&%s{}, id).Error\n", schema.Name))
 	sb.WriteString("}\n\n")
@@ -267,7 +267,7 @@ func (c *CodeGenerator) writeFindByIDMethod(sb *strings.Builder, schema *Schema,
 		pkType = pkField.Type
 	}
 
-	sb.WriteString(fmt.Sprintf("// FindByID 根据 ID 查找记录\n"))
+	sb.WriteString("// FindByID 根据 ID 查找记录\n")
 	sb.WriteString(fmt.Sprintf("func (d *%s) FindByID(id %s) (*%s, error) {\n", daoName, pkType, schema.Name))
 	sb.WriteString(fmt.Sprintf("\tvar entity %s\n", schema.Name))
 	sb.WriteString("\tif err := d.db.First(&entity, id).Error; err != nil {\n")
@@ -278,7 +278,7 @@ func (c *CodeGenerator) writeFindByIDMethod(sb *strings.Builder, schema *Schema,
 }
 
 func (c *CodeGenerator) writeFindAllMethod(sb *strings.Builder, schema *Schema, daoName string) {
-	sb.WriteString(fmt.Sprintf("// FindAll 查找所有记录\n"))
+	sb.WriteString("// FindAll 查找所有记录\n")
 	sb.WriteString(fmt.Sprintf("func (d *%s) FindAll() ([]*%s, error) {\n", daoName, schema.Name))
 	sb.WriteString(fmt.Sprintf("\tvar entities []*%s\n", schema.Name))
 	sb.WriteString("\tif err := d.db.Find(&entities).Error; err != nil {\n")

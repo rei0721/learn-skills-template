@@ -199,7 +199,7 @@ SQLite 数据库会自动创建，无需手动操作。
 
 ```bash
 # 使用项目内置命令初始化数据库
-go run cmd/server/main.go initdb
+go run ./cmd/server initdb
 
 # 或使用 Makefile
 make initdb
@@ -214,7 +214,7 @@ make initdb
 
 ```bash
 # 测试数据库连接
-go run cmd/server/main.go tests
+go run ./cmd/server tests
 
 # 或使用 Makefile
 make test-db
@@ -266,7 +266,7 @@ GOOS=windows GOARCH=amd64 go build -o bin/server.exe cmd/server/main.go
 
 ```bash
 # 直接运行
-go run cmd/server/main.go server
+go run ./cmd/server server
 
 # 使用 Air 热重载
 air
@@ -283,7 +283,7 @@ make build
 ./bin/server server
 
 # 或直接运行
-go run cmd/server/main.go server --config=configs/config.yaml
+go run ./cmd/server server --config=configs/config.yaml
 ```
 
 ### 3. 验证启动

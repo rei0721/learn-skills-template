@@ -242,6 +242,32 @@ func toPascalCase(s string) string {
 	return strings.Join(parts, "")
 }
 
+func toSingular(word string) string {
+	lower := strings.ToLower(word)
+	if strings.HasSuffix(lower, "ies") && len(word) > 3 {
+		return word[:len(word)-3] + "y"
+	}
+	if strings.HasSuffix(lower, "sses") || strings.HasSuffix(lower, "ches") || strings.HasSuffix(lower, "shes") || strings.HasSuffix(lower, "xes") || strings.HasSuffix(lower, "zes") {
+		if len(word) > 2 {
+			return word[:len(word)-2]
+		}
+		return word
+	}
+	if strings.HasSuffix(lower, "s") && !strings.HasSuffix(lower, "ss") && !strings.HasSuffix(lower, "us") {
+		return word[:len(word)-1]
+	}
+	return word
+}
+
+func toStructNameFromTable(tableName string) string {
+	parts := strings.Split(tableName, "_")
+	if len(parts) == 0 {
+		return toPascalCase(tableName)
+	}
+	parts[len(parts)-1] = toSingular(parts[len(parts)-1])
+	return toPascalCase(strings.Join(parts, "_"))
+}
+
 // toKebabCase 将字符串转换为短横线命名
 func toKebabCase(s string) string {
 	return strings.ReplaceAll(toSnakeCase(s), "_", "-")

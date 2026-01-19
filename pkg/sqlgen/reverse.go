@@ -3,7 +3,6 @@ package sqlgen
 import (
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 // ============================================================================
@@ -400,18 +399,4 @@ func (d *DBReverseBuilder) GenerateAll() (map[string]string, error) {
 func (d *DBReverseBuilder) GenerateToDir(dir string) error {
 	// TODO: 实现生成到目录
 	return NewError(ErrCodeUnknown, "database reverse not implemented yet")
-}
-
-// matchPattern 匹配通配符模式
-func matchPattern(name, pattern string) bool {
-	// 简单的通配符匹配
-	if strings.HasSuffix(pattern, "*") {
-		prefix := strings.TrimSuffix(pattern, "*")
-		return strings.HasPrefix(name, prefix)
-	}
-	if strings.HasPrefix(pattern, "*") {
-		suffix := strings.TrimPrefix(pattern, "*")
-		return strings.HasSuffix(name, suffix)
-	}
-	return name == pattern
 }

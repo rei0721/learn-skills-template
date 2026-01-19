@@ -1,6 +1,7 @@
 package executor
 
 import (
+	"errors"
 	"fmt"
 	"sync"
 	"time"
@@ -128,7 +129,7 @@ func (p *poolWrapper) ReleaseTimeout(timeout time.Duration) error {
 		// 超时,强制释放
 		// 注意: ants 的 Release 会阻塞直到所有任务完成
 		// 这里我们给它一个超时时间
-		return fmt.Errorf(ErrMsgShutdownTimeout)
+		return errors.New(ErrMsgShutdownTimeout)
 	}
 }
 
@@ -171,6 +172,10 @@ func wrapTaskWithRecover(poolName PoolName, task func()) func() {
 		// 使用 defer + recover 捕获 panic
 		defer func() {
 			if r := recover(); r != nil {
+				if handler := getPanicHandler(); handler != nil {
+					handler.HandlePanic(poolName, r)
+					return
+				}
 				// 捕获到 panic,记录详细信息
 				// 注意: 这里我们不能直接使用 logger,因为:
 				// 1. pkg 层不应依赖 internal 层

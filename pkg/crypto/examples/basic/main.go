@@ -8,7 +8,8 @@ import (
 )
 
 func main() {
-	fmt.Println("=== pkg/crypto 基础示例 ===\n")
+	fmt.Println("=== pkg/crypto 基础示例 ===")
+	fmt.Println()
 
 	// 1. 创建加密器（使用默认配置）
 	fmt.Println("1. 创建加密器")
@@ -16,7 +17,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("创建加密器失败: %v", err)
 	}
-	fmt.Println("✓ 加密器创建成功（使用默认配置）\n")
+	fmt.Println("✓ 加密器创建成功（使用默认配置）")
+	fmt.Println()
 
 	// 2. 加密密码
 	fmt.Println("2. 加密密码")
@@ -28,7 +30,8 @@ func main() {
 		log.Fatalf("密码加密失败: %v", err)
 	}
 	fmt.Printf("密码哈希: %s\n", hash)
-	fmt.Println("✓ 密码加密成功\n")
+	fmt.Println("✓ 密码加密成功")
+	fmt.Println()
 
 	// 3. 验证正确的密码
 	fmt.Println("3. 验证密码")
@@ -38,7 +41,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("密码验证失败: %v", err)
 	}
-	fmt.Println("✓ 密码验证成功\n")
+	fmt.Println("✓ 密码验证成功")
+	fmt.Println()
 
 	// 4. 验证错误的密码
 	fmt.Println("4. 验证错误密码")
@@ -61,7 +65,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("创建加密器失败: %v", err)
 	}
-	fmt.Println("✓ 自定义加密器创建成功（成本=12，密码长度=10-64）\n")
+	fmt.Println("✓ 自定义加密器创建成功（成本=12，密码长度=10-64）")
+	fmt.Println()
 
 	// 6. 测试密码长度验证
 	fmt.Println("6. 测试密码长度验证")
@@ -84,7 +89,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("更新配置失败: %v", err)
 	}
-	fmt.Println("✓ 配置更新成功（成本=11，密码长度=12-72）\n")
+	fmt.Println("✓ 配置更新成功（成本=11，密码长度=12-72）")
+	fmt.Println()
 
 	// 8. 验证更新后的配置生效
 	fmt.Println("8. 验证更新后的配置")
@@ -94,7 +100,8 @@ func main() {
 		log.Fatalf("密码加密失败: %v", err)
 	}
 	fmt.Printf("新密码哈希: %s\n", newHash)
-	fmt.Println("✓ 使用新配置加密成功\n")
+	fmt.Println("✓ 使用新配置加密成功")
+	fmt.Println()
 
 	// 9. 演示相同密码产生不同哈希
 	fmt.Println("9. 相同密码产生不同哈希（加盐效果）")
@@ -105,7 +112,8 @@ func main() {
 	fmt.Printf("密码 1 哈希: %s\n", hash1)
 	fmt.Printf("密码 2 哈希: %s\n", hash2)
 	if hash1 != hash2 {
-		fmt.Println("✓ 相同密码产生不同哈希（加盐生效）\n")
+		fmt.Println("✓ 相同密码产生不同哈希（加盐生效）")
+		fmt.Println()
 	} else {
 		log.Fatal("错误：相同密码产生了相同的哈希")
 	}
@@ -114,7 +122,8 @@ func main() {
 	fmt.Println("10. 验证两个哈希都有效")
 	if cryptoInstance.VerifyPassword(hash1, samePassword) == nil &&
 		cryptoInstance.VerifyPassword(hash2, samePassword) == nil {
-		fmt.Println("✓ 两个哈希都能验证原密码\n")
+		fmt.Println("✓ 两个哈希都能验证原密码")
+		fmt.Println()
 	} else {
 		log.Fatal("错误：哈希验证失败")
 	}

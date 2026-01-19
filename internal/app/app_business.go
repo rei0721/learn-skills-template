@@ -1,31 +1,44 @@
 package app
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 
+	"github.com/rei0721/go-scaffold/internal/handler"
 	"github.com/rei0721/go-scaffold/internal/middleware"
+	"github.com/rei0721/go-scaffold/internal/repository"
 	"github.com/rei0721/go-scaffold/internal/router"
 	"github.com/rei0721/go-scaffold/internal/service"
+	authService "github.com/rei0721/go-scaffold/internal/service/auth"
+	rbacService "github.com/rei0721/go-scaffold/internal/service/rbac"
 	"github.com/rei0721/go-scaffold/pkg/dbtx"
 )
 
 func (app *App) initBusiness() error {
-	// 初始化 repository layer
-	// authRepo := repository.NewAuthRepository(app.DB.DB())
+	authRepo := repository.NewAuthRepository(app.DB.DB())
+	authSvc := authService.NewAuthService(authRepo)
+	authSvcAsService, ok := authSvc.(service.Service)
+	if !ok {
+		return fmt.Errorf("auth service does not implement service.Service")
+	}
+	if _, err := app.setServiceAll(authSvcAsService); err != nil {
+		return err
+	}
+	authHandler := handler.NewAuthHandler(authSvc, app.Logger)
 
-	// 初始化 auth service
-	// authService := auth.NewAuthService(authRepo)
-
-	// 注入 app 到 Service 层
-	// if _, err := app.setServiceAll(authService); err != nil {
-	// 	return err
-	// }
-
-	// 初始化 handler layer
-	// ...
+	var rbacHandler *handler.RBACHandler
+	if app.RBAC != nil {
+		rbacRepo := repository.NewRBACRepository(app.RBAC)
+		rbacSvc := rbacService.NewRBACService(rbacRepo)
+		if _, err := app.setServiceAll(rbacSvc); err != nil {
+			return err
+		}
+		rbacHandler = handler.NewRBACHandler(rbacSvc, app.Logger)
+	}
 
 	// 初始化 router
-	r := router.New(nil, app.Logger, app.JWT)
+	r := router.New(authHandler, rbacHandler, app.Logger, app.JWT)
 
 	// Set Gin mode based on config
 	if app.Config.Server.Mode == "release" {

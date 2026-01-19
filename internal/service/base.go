@@ -71,10 +71,8 @@ func (s *BaseService[T]) SetDB(db database.Database) {
 // 注意:
 //
 //	此方法是线程安全的，可以在运行时动态替换
-func (BaseService[T]) SetRepository(repo T) *BaseService[T] {
-	return &BaseService[T]{
-		Repo: repo,
-	}
+func (s *BaseService[T]) SetRepository(repo T) {
+	s.Repo = repo
 }
 
 // SetExecutor 设置Executor依赖 (延迟注入)

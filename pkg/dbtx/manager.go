@@ -2,6 +2,7 @@ package dbtx
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"sync/atomic"
 
@@ -142,21 +143,13 @@ func (m *manager) WithTxOptions(ctx context.Context, opts *TxOptions, fn TxFunc)
 		"timeout", opts.Timeout,
 	)
 
-	tx = tx.Begin()
+	tx = tx.Begin(&sql.TxOptions{Isolation: opts.Isolation, ReadOnly: opts.ReadOnly})
 	if tx.Error != nil {
 		m.logEvent(LogEventError, "failed to begin transaction", "error", tx.Error)
 		return fmt.Errorf(ErrMsgBeginFailed, tx.Error)
 	}
 
-	// 7. 设置隔离级别（如果需要）
-	// 注意: 必须在 Begin 之后设置
-	if opts.Isolation != 0 {
-		// GORM 不直接支持设置隔离级别，需要使用原始 SQL
-		// 不同数据库的 SQL 语法不同，这里仅作示例
-		// 实际使用时建议在连接配置中设置默认隔离级别
-	}
-
-	// 8. 确保事务会被提交或回滚
+	// 7. 确保事务会被提交或回滚
 	var committed bool
 	defer func() {
 		if r := recover(); r != nil {
@@ -173,10 +166,10 @@ func (m *manager) WithTxOptions(ctx context.Context, opts *TxOptions, fn TxFunc)
 		}
 	}()
 
-	// 9. 执行业务逻辑
+	// 8. 执行业务逻辑
 	err := fn(tx)
 
-	// 10. 检查 Context 是否被取消
+	// 9. 检查 Context 是否被取消
 	select {
 	case <-txCtx.Done():
 		m.logEvent(LogEventTimeout, "transaction context done",
@@ -186,7 +179,7 @@ func (m *manager) WithTxOptions(ctx context.Context, opts *TxOptions, fn TxFunc)
 	default:
 	}
 
-	// 11. 根据错误决定提交或回滚
+	// 10. 根据错误决定提交或回滚
 	if err != nil {
 		m.logEvent(LogEventError, "transaction function returned error",
 			"error", err,
@@ -194,7 +187,7 @@ func (m *manager) WithTxOptions(ctx context.Context, opts *TxOptions, fn TxFunc)
 		return fmt.Errorf(ErrMsgTxFuncError, err)
 	}
 
-	// 12. 提交事务
+	// 11. 提交事务
 	if commitErr := tx.Commit().Error; commitErr != nil {
 		m.logEvent(LogEventError, "failed to commit transaction",
 			"error", commitErr,

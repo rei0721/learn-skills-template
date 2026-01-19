@@ -15,7 +15,7 @@ cp configs/config.example.yaml configs/config.yaml
 cp .env.example .env
 
 # 或者指定配置文件路径
-go run cmd/server/main.go server --config=configs/config.yaml
+go run ./cmd/server server --config=configs/config.yaml
 ```
 
 ### Q: 数据库连接失败，提示 "connection refused"
@@ -82,10 +82,10 @@ kill -9 <PID>
 mysql -u root -p -e "CREATE DATABASE scaffold CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
 # 重新初始化数据库
-go run cmd/server/main.go initdb --force
+go run ./cmd/server initdb --force
 
 # 检查数据库配置
-go run cmd/server/main.go tests --test=database
+go run ./cmd/server tests --test=database
 ```
 
 ### Q: 如何切换数据库类型？
@@ -125,7 +125,7 @@ database:
 **解决方案：**
 ```bash
 # 重新运行数据库初始化
-go run cmd/server/main.go initdb
+go run ./cmd/server initdb
 
 # 或者在代码中手动迁移
 db.AutoMigrate(&models.User{}, &models.Role{})
@@ -167,7 +167,7 @@ rbac.AddRoleForUser("user123", "editor")
 **解决方案：**
 ```bash
 # 重新初始化数据库（会重置所有数据）
-go run cmd/server/main.go initdb --force
+go run ./cmd/server initdb --force
 
 # 或者直接修改数据库中的密码
 # 首先生成新密码的哈希值
@@ -229,11 +229,11 @@ app:
 cp configs/config.yaml configs/config.production.yaml
 
 # 使用特定配置启动
-go run cmd/server/main.go server --config=configs/config.production.yaml
+go run ./cmd/server server --config=configs/config.production.yaml
 
 # 或使用环境变量
 export REI_CONFIG_PATH=configs/config.production.yaml
-go run cmd/server/main.go server
+go run ./cmd/server server
 ```
 
 ## 📝 日志相关

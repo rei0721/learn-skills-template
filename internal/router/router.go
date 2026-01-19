@@ -29,6 +29,8 @@ type Router struct {
 	// 通过接口注入,便于测试和替换实现
 	authHandler *handler.AuthHandler
 
+	rbacHandler *handler.RBACHandler
+
 	// logger 日志记录器
 	// 用于记录路由相关的日志
 	// 也会传递给中间件使用
@@ -57,9 +59,10 @@ type Router struct {
 // 使用场景:
 //
 //	在应用初始化时创建,然后调用 Setup() 配置路由
-func New(authHandler *handler.AuthHandler, log logger.Logger, jwtManager jwt.JWT) *Router {
+func New(authHandler *handler.AuthHandler, rbacHandler *handler.RBACHandler, log logger.Logger, jwtManager jwt.JWT) *Router {
 	return &Router{
 		authHandler: authHandler,
+		rbacHandler: rbacHandler,
 		logger:      log,
 		jwt:         jwtManager,
 	}
@@ -141,15 +144,36 @@ func (r *Router) registerRoutes() {
 	// - URL 清晰,易于理解
 	v1 := r.engine.Group("/api/v1")
 	{
-		// ==================== 公开路由 ====================
-		// 这些路由不需要认证即可访问
-
-		// 认证相关路由组
-		v1.Group("/auth")
-		{
-
+		if r.authHandler != nil {
+			authGroup := v1.Group("/auth")
+			{
+				authGroup.POST("/register", r.authHandler.Register)
+				authGroup.POST("/login", r.authHandler.Login)
+			}
 		}
 
+		var protected *gin.RouterGroup
+		if r.jwt != nil {
+			protected = v1.Group("")
+			protected.Use(middleware.AuthMiddleware(r.jwt))
+		} else {
+			protected = v1
+		}
+
+		if r.rbacHandler != nil {
+			rbacGroup := protected.Group("/rbac")
+			{
+				rbacGroup.POST("/users/:userId/roles", r.rbacHandler.AssignRoleToUser)
+				rbacGroup.DELETE("/users/:userId/roles", r.rbacHandler.RevokeRoleFromUser)
+				rbacGroup.GET("/users/:userId/roles", r.rbacHandler.GetUserRoles)
+
+				rbacGroup.POST("/roles/:role/policies", r.rbacHandler.AddPolicyToRole)
+				rbacGroup.DELETE("/roles/:role/policies", r.rbacHandler.RemovePolicyFromRole)
+				rbacGroup.GET("/policies", r.rbacHandler.ListPolicies)
+
+				rbacGroup.POST("/enforce", r.rbacHandler.Enforce)
+			}
+		}
 	}
 }
 

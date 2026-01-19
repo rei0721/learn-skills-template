@@ -271,7 +271,9 @@ func NewWithHooks(cfg *Config, hooks ...Hook) (Database, error) {
 	// Hooks 允许在 GORM 操作前后执行自定义逻辑
 	// 例如:审计、日志、验证等
 	if len(hooks) > 0 {
-		registerHooks(db, hooks)
+		if err := registerHooks(db, hooks); err != nil {
+			return nil, fmt.Errorf("failed to register hooks: %w", err)
+		}
 	}
 
 	// 7. 返回数据库实例
@@ -407,7 +409,7 @@ func configureConnectionPool(sqlDB *sql.DB, cfg *Config) {
 //	Before Query: 查询之前
 //	After Query: 查询之后
 //	(还有 Update, Delete 等,这里未实现)
-func registerHooks(db *gorm.DB, hooks []Hook) {
+func registerHooks(db *gorm.DB, hooks []Hook) error {
 	// 遍历所有 hooks
 	for _, hook := range hooks {
 		// 捕获循环变量,避免闭包问题
@@ -418,26 +420,35 @@ func registerHooks(db *gorm.DB, hooks []Hook) {
 		// 注册 "创建之前" 回调
 		// Before("gorm:create"): 在 GORM 的 create 操作之前执行
 		// Register: 注册一个命名的回调函数
-		db.Callback().Create().Before("gorm:create").Register("hook:before_create", func(tx *gorm.DB) {
+		if err := db.Callback().Create().Before("gorm:create").Register("hook:before_create", func(tx *gorm.DB) {
 			h.BeforeCreate(tx)
-		})
+		}); err != nil {
+			return err
+		}
 
 		// 注册 "创建之后" 回调
 		// After("gorm:create"): 在 GORM 的 create 操作之后执行
-		db.Callback().Create().After("gorm:create").Register("hook:after_create", func(tx *gorm.DB) {
+		if err := db.Callback().Create().After("gorm:create").Register("hook:after_create", func(tx *gorm.DB) {
 			h.AfterCreate(tx)
-		})
+		}); err != nil {
+			return err
+		}
 
 		// 注册 "查询之前" 回调
 		// 可用于添加通用查询条件(如租户隔离)
-		db.Callback().Query().Before("gorm:query").Register("hook:before_query", func(tx *gorm.DB) {
+		if err := db.Callback().Query().Before("gorm:query").Register("hook:before_query", func(tx *gorm.DB) {
 			h.BeforeQuery(tx)
-		})
+		}); err != nil {
+			return err
+		}
 
 		// 注册 "查询之后" 回调
 		// 可用于结果处理、缓存更新等
-		db.Callback().Query().After("gorm:query").Register("hook:after_query", func(tx *gorm.DB) {
+		if err := db.Callback().Query().After("gorm:query").Register("hook:after_query", func(tx *gorm.DB) {
 			h.AfterQuery(tx)
-		})
+		}); err != nil {
+			return err
+		}
 	}
+	return nil
 }

@@ -17,8 +17,7 @@ type DBUser struct {
 	// Email 邮箱地址
 	// gorm:"uniqueIndex" 确保邮箱唯一,用于登录和找回密码
 	// size:100 邮箱地址的合理最大长度
-	// not null 邮箱为必填项
-	Email string `gorm:"uniqueIndex;size:100;not null" json:"email"`
+	Email *string `gorm:"uniqueIndex;size:100" json:"email,omitempty"`
 
 	// Password 加密后的密码
 	// size:255 bcrypt 等加密算法生成的哈希值长度

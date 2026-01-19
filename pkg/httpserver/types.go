@@ -168,13 +168,6 @@ func (e *ServerError) Unwrap() error {
 	return e.Err
 }
 
-// listenerInfo 监听器信息
-// 用于追踪服务器监听的地址和端口
-type listenerInfo struct {
-	Addr string // 监听地址，格式: "host:port"
-	// 未来可以扩展更多信息
-}
-
 // serverState 服务器状态
 type serverState int
 

@@ -24,6 +24,18 @@
 | 13  | 数据库规范   | `./skills/13-database/`           | 数据库操作   | 8      |
 | 14  | 测试规范     | `./skills/14-testing/`            | 测试开发     | 9      |
 | 15  | 文档维护规范 | `./skills/15-documentation/`      | **始终加载** | 5      |
+| 16  | 更新         | `./skills/16-updates/`            | **始终加载** | 10     |
+| 17  | 模型规范     | `./skills/17-models/`             | 后端开发     | 7      |
+| 18  | 技能补齐     | `./skills/18-skill-gap/`          | **始终加载** | 6      |
+| 19  | 业务服务规范 | `./skills/19-services/`           | 后端开发     | 7      |
+| 20  | 数据访问规范 | `./skills/20-repository/`         | 后端开发     | 7      |
+| 21  | 可复用工具包规范 | `./skills/21-pkg-reusables/`   | 后端开发     | 7      |
+| 22  | 中间件规范   | `./skills/22-middleware/`         | 后端开发     | 7      |
+| 23  | 处理器规范   | `./skills/23-handler/`            | 后端开发     | 7      |
+| 24  | 错误处理规范 | `./skills/24-error-handling/`     | 后端开发     | 7      |
+| 25  | 配置集成流程 | `./skills/25-config-integration/` | 配置变更     | 7      |
+| 26  | 工作流库     | `./skills/workflows/`             | 按需加载     | 10     |
+| 27  | 项目目标规划 | `./skills/27-project-goals/`      | **始终加载** | 2      |
 | 99  | 开发流程     | `./skills/99-workflows/`          | 按需加载     | 10     |
 
 ## AI 行为裁决规则

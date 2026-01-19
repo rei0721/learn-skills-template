@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -696,7 +697,9 @@ func ResolveEnvValue(value string) string {
 func ParsePort(value string) int {
 	resolved := ResolveEnvValue(value)
 	resolved = strings.TrimSpace(resolved)
-	var port int
-	fmt.Sscanf(resolved, "%d", &port)
+	port, err := strconv.Atoi(resolved)
+	if err != nil {
+		return 0
+	}
 	return port
 }

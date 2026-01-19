@@ -14,6 +14,9 @@ func (app *App) runModeServer() (*App, error) {
 	if err := app.initDBTx(); err != nil {
 		return nil, err
 	}
+	if err := app.initRBAC(); err != nil {
+		return nil, err
+	}
 
 	// 阶段2：初始化Executor
 	if err := app.initExecutor(); err != nil {

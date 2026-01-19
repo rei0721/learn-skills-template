@@ -14,7 +14,7 @@ type UserResponse struct {
 	Username string `json:"username"`
 
 	// Email 邮箱地址
-	Email string `json:"email"`
+	Email *string `json:"email,omitempty"`
 
 	// Status 用户状态
 	// 1: 激活, 0: 未激活/禁用

@@ -173,7 +173,7 @@
 
 4. **数据库迁移**
    ```bash
-   go run cmd/server/main.go initdb --migrate
+   go run ./cmd/server initdb --migrate
    ```
 
 5. **重新构建**

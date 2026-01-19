@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/rei0721/go-scaffold/internal/models"
@@ -35,7 +36,7 @@ type authService struct {
 //	其他依赖通过 SetXxx 等方法延迟注入
 func NewAuthService(repo repository.AuthRepository) AuthService {
 	s := &authService{}
-	s.SetRepository(repo)
+	s.BaseService.SetRepository(repo)
 	return s
 }
 
@@ -51,25 +52,15 @@ func (s *authService) Register(ctx context.Context, req *types.RegisterRequest) 
 		return nil, errors.NewBizError(errors.ErrDuplicateUsername, "username already exists")
 	}
 
-	// 2. 检查邮箱是否已存在
-	existingUser, err = s.Repo.FindUserByEmail(ctx, req.Email)
-	if err != nil {
-		return nil, errors.NewBizError(errors.ErrDatabaseError, "failed to check email").WithCause(err)
-	}
-	if existingUser != nil {
-		return nil, errors.NewBizError(errors.ErrDuplicateEmail, "email already exists")
-	}
-
-	// 3. 加密密码
+	// 2. 加密密码
 	hashedPassword, err := s.Crypto.HashPassword(req.Password)
 	if err != nil {
 		return nil, errors.NewBizError(errors.ErrInternalServer, "failed to hash password").WithCause(err)
 	}
 
-	// 4. 创建用户对象
+	// 3. 创建用户对象
 	user := &models.DBUser{
 		Username: req.Username,
-		Email:    req.Email,
 		Password: hashedPassword,
 		Status:   1, // 默认激活
 	}
@@ -93,12 +84,8 @@ func (s *authService) Register(ctx context.Context, req *types.RegisterRequest) 
 
 		// 7. 分配默认角色（如果启用了 RBAC）
 		if rbacManager := s.GetRBAC(); rbacManager != nil {
-			// 注意：这里假设存在一个默认角色，实际应该根据业务需求配置
-			// 例如：分配 "user" 角色
-			// 这部分需要 RBAC 服务支持通过角色名查找角色ID的方法
-			// 此处留作示例，实际使用时需要完善
-			if log := s.GetLogger(); log != nil {
-				log.Info("RBAC is enabled, but default role assignment is not implemented yet", "userId", user.ID)
+			if err := rbacManager.AddRoleForUser(strconv.FormatInt(user.ID, 10), "user"); err != nil {
+				return errors.NewBizError(errors.ErrInternalServer, "failed to assign default role").WithCause(err)
 			}
 		}
 
@@ -155,8 +142,9 @@ func (s *authService) registerWithoutTxManager(ctx context.Context, user *models
 
 	// 分配默认角色
 	if rbacManager := s.GetRBAC(); rbacManager != nil {
-		if log := s.GetLogger(); log != nil {
-			log.Info("RBAC is enabled, but default role assignment is not implemented yet", "userId", user.ID)
+		if err := rbacManager.AddRoleForUser(strconv.FormatInt(user.ID, 10), "user"); err != nil {
+			tx.Rollback()
+			return nil, errors.NewBizError(errors.ErrInternalServer, "failed to assign default role").WithCause(err)
 		}
 	}
 
