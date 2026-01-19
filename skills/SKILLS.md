@@ -36,6 +36,7 @@
 | 25  | 配置集成流程 | `./skills/25-config-integration/` | 配置变更     | 7      |
 | 26  | 工作流库     | `./skills/workflows/`             | 按需加载     | 10     |
 | 27  | 项目目标规划 | `./skills/27-project-goals/`      | **始终加载** | 2      |
+| 28  | 项目计划文档配套 | `./skills/28-project-plan-docs/` | **始终加载** | 3      |
 | 99  | 开发流程     | `./skills/99-workflows/`          | 按需加载     | 10     |
 
 ## AI 行为裁决规则

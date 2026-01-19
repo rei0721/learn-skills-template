@@ -53,4 +53,5 @@ dependencies: [00-project-map, 15-documentation]
 | 2026-01-19 | Docs | 新增 internal/models 模型定义技能书 | skills/17-models/SKILL.md, skills/SKILLS.md, skills/README.md | 人工检查文档 |
 | 2026-01-19 | Added | 新增技能补齐、业务服务、数据访问、可复用工具包、中间件、处理器、错误处理、配置集成与工作流库技能书 | skills/18-skill-gap/SKILL.md, skills/19-services/SKILL.md, skills/20-repository/SKILL.md, skills/21-pkg-reusables/SKILL.md, skills/22-middleware/SKILL.md, skills/23-handler/SKILL.md, skills/24-error-handling/SKILL.md, skills/25-config-integration/SKILL.md, skills/workflows/SKILL.md, skills/SKILLS.md, skills/README.md | 人工检查文档 |
 | 2026-01-19 | Added | 新增项目目标规划技能书并设为必加载 | skills/27-project-goals/SKILL.md, skills/SKILLS.md, skills/README.md | 人工检查文档 |
+| 2026-01-19 | Added | 新增项目计划文档配套技能书并设为必加载 | skills/28-project-plan-docs/SKILL.md, skills/SKILLS.md, skills/README.md | 人工检查文档 |
 
